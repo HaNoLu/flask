@@ -1,0 +1,20 @@
+*{
+    font-family: "Times New Roman";
+
+}
+h1.subject{
+    text-align: center;
+
+}
+body{
+    background-color: lightblue ;
+    color: black;
+}
+table.products{
+    border-collapse:collapse ;
+    width: 100%;
+}
+.container{
+    width: 80%;
+    margin: 0 auto;
+}
