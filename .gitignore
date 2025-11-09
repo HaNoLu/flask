@@ -1,8 +1,2 @@
-# Virtual environment
-venv/
-*.pyc
-__pycache__/
-
-# Database
-instance/
-*.db
+venv 
+*.pyc 
