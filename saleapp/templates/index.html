@@ -8,10 +8,11 @@
 </head>
 <body>
     <h1 class="subject"> Chào Mừng Các Bạn Đến Với website Bán Hàng Trực Tuyến</h1>
+
 <ul>
     <li><a href="{{url_for('products_list')}}">Tất Cả Sản Phẩm</a></li>
     {% for c in cat%}
-    <li><a href="#">{{c.name}}</a></li>
+    <li><a href="{{url_for('products_list',category_id=c.id)}}">{{c.name}}</a></li>
     {%endfor%}
 </ul>
 </body>

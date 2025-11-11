@@ -6,8 +6,16 @@
     <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet" >
 </head>
 <body>
-<h1 class="subject"> Danh Sách Sản Phẩm</h1>
 <div class="container">
+    <h1 class="subject"> Danh Sách Sản Phẩm</h1>
+    <hr>
+    <form>
+        <input type="text" name="keyword" placeholder="Nhập từ khóa muốn tìm... "/>
+        <input type="number" name="from_price" placeholder="Giá từ... "/>
+        <input type="number" name="to_price" placeholder="giá max"/>
+        <input type="submit" value="Tìm"/>
+    </form>
+    <hr>
     <table border="1" class="products">
         <tr>
             <th></th>
@@ -18,7 +26,11 @@
         </tr>
         {%for p in products%}
         <tr>
-            <td><img src="{{url_for('static',filename=p.image)}}" width="120" height="120" alt="{{p.name}}"></td>
+            <td>
+                <a href="{{url_for('product_profile',product_id=p.id)}}">
+                    <img src="{{url_for('static',filename=p.image)}}" width="120" height="120" alt="{{p.name}}">
+                </a>
+            </td>
             <td>{{p.id}}</td>
             <td>{{p.name}}</td>
             <td>{{p.description}}</td>
