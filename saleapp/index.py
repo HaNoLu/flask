@@ -1,6 +1,7 @@
+
 from flask import render_template, Flask,redirect,url_for,request
-from mysaleapp.saleapp import app
-from mysaleapp.saleapp import utils
+from mysaleapp.saleapp import app, utils
+
 @app.route('/')
 def main():
     cates=utils.load_categories()
@@ -18,5 +19,3 @@ def product_profile(product_id):
     product = utils.get_products_by_id(product_id=product_id)
     return  render_template('product_detail.html',product=product)
 
-if __name__=='__main__':
-    app.run(debug=True)
