@@ -1,14 +1,14 @@
 *{
     font-family: "Times New Roman";
-
 }
 h1.subject{
     text-align: center;
+    color:black;
 
 }
 body{
-    background-color: lightblue ;
-    color: black;
+    background-color: white;
+
 }
 table.products{
     border-collapse:collapse ;

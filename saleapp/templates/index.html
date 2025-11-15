@@ -2,13 +2,29 @@
 {%block title%}Trang chủ{%endblock%}
 {%block content%}
 <h1 class="subject"> Chào Mừng Các Bạn Đến Với website Bán Hàng Trực Tuyến</h1>
+<div class="container">
+    <h1 class="subject"> Danh Sách Sản Phẩm</h1>
+    {%if products%}
+    <div class="row">
+        {%for p in products%}
+        <div class="col-md-3 col-xs-12" style="padding: 5px">
+            <div class="card" >
+              <img class="card-img-top" src="{{url_for('static',filename=p.image)}}"  height="320px" alt="{{p.name}}">
+              <div class="card-body">
+                <h4 class="card-title">{{p.name}}</h4>
+                <p class="card-text">{{"{:,.1f}".format(p.price)}}</p>
+                <a href="#" class="btn btn-primary">Đặt Hàng</a>
+              </div>
+            </div>
 
-<ul>
-    <li><a href="{{url_for('products_list')}}">Tất Cả Sản Phẩm</a></li>
-    {% for c in cat%}
-    <li><a href="{{url_for('products_list',category_id=c.id)}}">{{c.name}}</a></li>
-    {%endfor%}
-</ul>
+        </div>
+        {%endfor%}
+    </div>
+    {%else%}
+    <p><i>Hiện Tại Chưa Có Sản Phẩm</i></p>
+    {%endif%}
+
+</div>
 {%endblock%}
 <!DOCTYPE html>
 <html lang="en">

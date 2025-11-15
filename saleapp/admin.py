@@ -12,7 +12,7 @@ class ProductView(ModelView):
     column_searchable_list = ['name']
     column_filters = ('name','price')
     column_list = ('id', 'name', 'price', 'category')
-    form_columns = ('name', 'description', 'price', 'active', 'category')
+    form_columns = ('name', 'description', 'price', 'active', 'category','image')
     column_labels = {
         'id':'STT',
         'name':'Tên sản phẩm',

@@ -4,15 +4,18 @@ from mysaleapp.saleapp import app, utils
 
 @app.route('/')
 def main():
-    cates=utils.load_categories()
-    return render_template('index.html',cat=cates)
+    categories=utils.load_categories()
+    category_id=request.args.get('category_id')
+    kw=request.args.get('keyword')
+    products=utils.load_products(category_id=category_id,kw=kw)
+    return render_template('index.html',categories=categories,products=products)
 @app.route('/products')
 def products_list():
-    cate_id=request.args.get('category_id')
+    category_id=request.args.get('category_id')
     kw=request.args.get('keyword')
     from_price=request.args.get('from_price')
     to_price=request.args.get('to_price')
-    products = utils.load_products(cate_id=cate_id,kw=kw,from_price=from_price ,to_price=to_price)
+    products = utils.load_products(category_id=category_id,kw=kw,from_price=from_price ,to_price=to_price)
     return render_template('products.html',products=products)
 @app.route('/products/<int:product_id>')
 def product_profile(product_id):
