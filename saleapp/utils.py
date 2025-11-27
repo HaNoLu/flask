@@ -1,6 +1,7 @@
 
-from mysaleapp.saleapp.models import Product,Category
-from mysaleapp.saleapp import app
+from mysaleapp.saleapp.models import Product,Category,User
+from mysaleapp.saleapp import app,db
+import hashlib
 def read_json(path):
     pass
 def load_categories():
@@ -30,3 +31,13 @@ def get_products_by_id(product_id):
     return Product.query.get(product_id)
 def  count_products():
     return Product.query.filter(Product.active.__eq__(True)).count()
+def add_User(username,password,name,**kwagrs):
+        password=str(hashlib.md5(password.encode('utf-8')).hexdigest())
+        user=User(username=username,
+                  password=password,
+                  name=name,
+                  email=kwagrs.get('email'),
+                  avatar=kwagrs.get('avatar'),
+                  )
+        db.session.add(user)
+        db.session.commit()

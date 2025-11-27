@@ -21,7 +21,9 @@
                 <a class="nav-link" href="{{url_for('main',category_id=c.id)}}">{{c.name}}</a>
             </li>
             {%endfor%}
-
+            <li class="nav-item">
+                <a class="nav-link " href="{{url_for('register')}}">Đăng Ký</a>
+            </li>
         </ul>
     </div>
     <form class="form-inline"  >

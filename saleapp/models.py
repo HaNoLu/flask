@@ -1,12 +1,29 @@
-from sqlalchemy import  Column,Integer,String,Float,DateTime,ForeignKey,Boolean
+from sqlalchemy import  Column,Integer,String,Float,DateTime,ForeignKey,Boolean,Enum
 from mysaleapp.saleapp import db
 from datetime import datetime
 from sqlalchemy.orm import relationship
+from enum import Enum as UserEnum
 
 class BaseModel(db.Model):
     __abstract__ = True
     id = Column(Integer, primary_key=True, autoincrement=True)
+class UserRole(UserEnum):
+    ADMIN=1
+    USER=2
 
+class User(BaseModel):
+    __tablename__ = 'user'
+    name=Column(String(50),nullable=False)
+    username=Column(String(50),nullable=False,unique=True)
+    email=Column(String(50),nullable=False)
+    password=Column(String(50),nullable=False)
+    avatar=Column(String(100),nullable=True)
+    active=Column(Boolean,default=True )
+    joined_date=Column(DateTime,default=datetime.now)
+    user_role=Column(Enum(UserRole),default=UserRole.USER)
+
+    def __str__(self):
+        return self.name
 
 class Category(BaseModel ):
     __tablename__ = 'category'
@@ -27,3 +44,5 @@ class Product(BaseModel):
     category= relationship("Category", back_populates="products")
     def __str__(self):
         return self.name
+
+
