@@ -41,3 +41,11 @@ def add_User(username,password,name,**kwagrs):
                   )
         db.session.add(user)
         db.session.commit()
+def check_login(username,password):
+    password=str(hashlib.md5(password.encode('utf-8')).hexdigest())
+    user=User.query.filter(User.username==username.strip(),
+                           User.password==password).first()
+    if user:
+        return user
+def get_user_by_id(user_id):
+    return User.query.get(user_id)

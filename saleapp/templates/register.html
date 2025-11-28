@@ -1,11 +1,11 @@
 {% extends 'layout/base.html'%}
 {%block title%}Đăng Ký Người Dùng{%endblock%}
 {%block content%}
+        <h1 class="text-danger subject">Đăng Ký Người Dùng</h1>
         <form method='post' action="{{url_for('register')}}" enctype="multipart/form-data">
             {%if err_msg%}
             <div class="alert alert-danger">
                 <h4><b>{{err_msg}}</b></h4>
-
             </div>
             {%endif%}
               <div class="form-group">

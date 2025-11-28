@@ -3,7 +3,7 @@ from mysaleapp.saleapp import db
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from enum import Enum as UserEnum
-
+from flask_login import UserMixin
 class BaseModel(db.Model):
     __abstract__ = True
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -11,7 +11,7 @@ class UserRole(UserEnum):
     ADMIN=1
     USER=2
 
-class User(BaseModel):
+class User(BaseModel,UserMixin):
     __tablename__ = 'user'
     name=Column(String(50),nullable=False)
     username=Column(String(50),nullable=False,unique=True)
