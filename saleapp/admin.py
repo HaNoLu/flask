@@ -1,6 +1,5 @@
 from mysaleapp.saleapp import app, db
 from flask_admin import Admin
-
 from flask_admin.contrib.sqla import ModelView
 from mysaleapp.saleapp.models import Category, Product
 

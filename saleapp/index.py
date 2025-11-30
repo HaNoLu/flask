@@ -1,5 +1,5 @@
 import math
-from flask import render_template,redirect,url_for,request
+from flask import render_template,redirect,url_for,request,session,jsonify
 from mysaleapp.saleapp import app, utils,login
 import cloudinary.uploader
 from flask_login import login_user,logout_user
@@ -29,6 +29,7 @@ def products_list():
 def common_response():
     return {
         'categories':utils.load_categories(),
+
     }
 @app.route('/products/<int:product_id>')
 def product_profile(product_id):
@@ -85,5 +86,24 @@ def user_load(user_id):
 def logout():
     logout_user()
     return redirect(url_for('login_page'))
+@app.route('/api/add_cart',methods=['POST'] )
+def add_cart():
+    data=request.json
+    id=str(data.get('id'))
+    name=data.get('name')
+    price=float(data.get('price'))
 
-
+    cart=session.get('cart')
+    if not cart:
+        cart={}
+    if id in cart:
+        cart[id]['quantity']=cart[id]['quantity']+1
+    else:
+        cart[id]={
+            'id':id,
+            'name':name,
+            'price':price,
+            'quantity':1
+        }
+    session['cart']=cart
+    return jsonify(utils.get_quantity_cart(cart))

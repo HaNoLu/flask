@@ -1,4 +1,4 @@
-
+from flask import session
 from mysaleapp.saleapp.models import Product,Category,User
 from mysaleapp.saleapp import app,db
 import hashlib
@@ -49,3 +49,15 @@ def check_login(username,password):
         return user
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+def get_quantity_cart(cart):
+    total_quantity=0
+    total_price=0.0
+    if cart:
+        for i in cart.values():
+            total_quantity+=int(i['quantity'])
+            total_price+=int(i['quantity'])*float(i['price'])
+    return {
+        'total_quantity':total_quantity,
+        'total_price':total_price,
+    }
+
