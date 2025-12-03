@@ -44,8 +44,8 @@
             </li>
             {%endif%}
             <li class="nav-item " >
-                <a class="nav-link text-white" href="#">
-                    Giỏ Hàng <span class="badge-info" id="cartCounter">0</span>
+                <a class="nav-link text-white" href="{{url_for('cart')}}">
+                    Giỏ Hàng <span class="badge-info" id="cartCounter">{{cart_stats['total_quantity']}}</span>
                 </a>
 
             </li>

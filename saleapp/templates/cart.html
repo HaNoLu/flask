@@ -1,0 +1,39 @@
+{% extends 'layout/base.html'%}<!-- extends cần thay đổi j thì ghi đè lên như sau -->
+{%block title%}Giỏ Hàng{%endblock%}
+{%block content%}
+    <h1 class="subject text-danger"  >Giỏ Hàng</h1>
+
+{%if 'cart' in session and session['cart']%}
+<table class="table">
+    <tr>
+        <td>Mã sản phẩm</td>
+        <td>Tên sản phẩm</td>
+        <td>Giá</td>
+        <td>Số lượng</td>
+    </tr>
+    {%for c in session['cart'].values()%}
+    <tr>
+        <td>{{c.id}}</td>
+        <td>{{c.name}}</td>
+        <td>{{c.price}}</td>
+        <td>{{c.quantity}}</td>
+    </tr>
+    {%endfor%}
+
+
+</table>
+<div class="alert alert-info">
+        <h5>Tổng sản phẩm: {{stats['total_quantity']}}</h5>
+        <h5>Tổng Tiền: {{('{:,.1f}').format(stats['total_price']) }} VND</h5>
+    </div>
+{%if current_user.is_authenticated%}
+<input type="button" value="Thanh Toán" class="btn btn-danger" onclick="pay()">
+<br>
+<br>
+{%else%}
+<a href="{{url_for('login_page',next='cart')}}"> Đăng Nhập Để Thanh Toán</a>
+{%endif%}
+{%else%}
+<p class="subject "> Hiện Tại Giỏ Không Có Sản Phẩm Nào!!!!</p>
+{%endif%}
+{%endblock%}

@@ -21,10 +21,9 @@ class User(BaseModel,UserMixin):
     active=Column(Boolean,default=True )
     joined_date=Column(DateTime,default=datetime.now)
     user_role=Column(Enum(UserRole),default=UserRole.USER)
-
+    receipts=relationship("Receipt",backref="user",lazy=True)
     def __str__(self):
         return self.name
-
 class Category(BaseModel ):
     __tablename__ = 'category'
     products = relationship("Product",back_populates='category',lazy=True)
@@ -42,7 +41,18 @@ class Product(BaseModel):
     created_date=Column(DateTime,default=datetime.now)
     category_id=Column(Integer,ForeignKey('category.id'),nullable=False)
     category= relationship("Category", back_populates="products")
+    receipt_details=relationship("ReceiptDetails",backref="product",lazy=True)
     def __str__(self):
         return self.name
+class Receipt(BaseModel):
+    created_date=Column(DateTime,default=datetime.now)
+    user_id=Column(Integer,ForeignKey(User.id),nullable=False)
+    details=relationship("ReceiptDetails",backref="receipt", lazy=True)
+class ReceiptDetails(db.Model):
+    receipt_id=Column(Integer,ForeignKey(Receipt.id),nullable=False,primary_key=True)
+    product_id=Column(Integer,ForeignKey(Product.id),nullable=False,primary_key=True)
+    quantity=Column(Integer,default=0)
+    price=Column(Float,default=0)
+
 
 

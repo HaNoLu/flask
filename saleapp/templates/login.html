@@ -2,7 +2,7 @@
 {%block title%}Đăng nhập{%endblock%}
 {%block content%}
         <h1 class="text-success subject " >Đăng Nhập Người Dùng</h1>
-        <form method='post' action="{{url_for('login_page')}}">
+        <form method='post' >
             {%if err_msg%}
             <div class="alert alert-danger">
                 <h4><b>{{err_msg}}</b></h4>

@@ -1,6 +1,7 @@
 from flask import session
-from mysaleapp.saleapp.models import Product,Category,User
+from mysaleapp.saleapp.models import Product, Category, User, Receipt,ReceiptDetails
 from mysaleapp.saleapp import app,db
+from flask_login import current_user
 import hashlib
 def read_json(path):
     pass
@@ -60,4 +61,11 @@ def get_quantity_cart(cart):
         'total_quantity':total_quantity,
         'total_price':total_price,
     }
-
+def add_receipt(cart):
+    if cart:
+        receipt=Receipt(user=current_user)
+        db.session.add(receipt)
+        for c in cart.values():
+            d=ReceiptDetails(receipt=receipt,product_id=c['id'] ,quantity=c['quantity'],price=c['price'])
+            db.session.add(d)
+        db.session.commit()

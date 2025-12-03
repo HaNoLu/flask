@@ -1,8 +1,10 @@
 import math
 from flask import render_template,redirect,url_for,request,session,jsonify
+
+
 from mysaleapp.saleapp import app, utils,login
 import cloudinary.uploader
-from flask_login import login_user,logout_user
+from flask_login import login_user,logout_user,login_required
 
 
 @app.route('/')
@@ -29,7 +31,7 @@ def products_list():
 def common_response():
     return {
         'categories':utils.load_categories(),
-
+        'cart_stats':utils.get_quantity_cart(session.get('cart')),
     }
 @app.route('/products/<int:product_id>')
 def product_profile(product_id):
@@ -71,13 +73,17 @@ def login_page():
         username=request.form.get('username')
         password=request.form.get('password')
         user=utils.check_login(username=username,password=password)
+
         if user :
             login_user(user=user)
-            return redirect(url_for('main'))
+            next = request.args.get('next', 'main')
+            return redirect(url_for(next))
         else:
             err_msg="Password of Username is Fasle"
     return render_template('login.html',err_msg=err_msg)
-
+@app.route('/cart')
+def cart():
+    return render_template('cart.html',stats=utils.get_quantity_cart(session.get('cart')))
 @login.user_loader# tự gọi khi đăng nhập thành công
 def user_load(user_id):
     return utils.get_user_by_id(user_id=user_id)
@@ -107,3 +113,12 @@ def add_cart():
         }
     session['cart']=cart
     return jsonify(utils.get_quantity_cart(cart))
+@app.route('/api/pay',methods=['POST'] )
+@login_required
+def pay():
+    try:
+        utils.add_receipt(cart=session.get('cart'))
+        del session['cart']
+    except Exception as ex:
+        return (jsonify({'code':400}))
+    return jsonify({'code':200})

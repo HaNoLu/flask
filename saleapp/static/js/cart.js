@@ -21,3 +21,15 @@ function addToCart(id,name,price){
         console.error(err)
     })
 }
+function pay(){
+    if(confirm("Bạn chắc chắn thanh toán chứ?")==true){
+        event.preventDefault();
+        fetch('api/pay',{
+            method:'POST',
+        }).then(res=> res.json()).then(data=>{
+            if (data.code==200)
+                location.reload()
+        }).catch(err=> console.error(err) )
+    }
+
+}
