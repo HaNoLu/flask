@@ -1,0 +1,77 @@
+{%extends 'admin/base.html'%}
+{%block body%}
+<h1 class="text-center text-danger">Thống Kê Doanh Thu</h1>
+
+<div class="row">
+    <div class="col-md-6 col-xs-12">
+    <table class="table">
+        <tr>
+            <th>Mã SP</th>
+            <th>Tên SP</th>
+            <th>Doanh Thu</th>
+        </tr>
+        {%for s in stats%}
+        {%if s[2]%}
+        <tr>
+            <td>{{s[0]}}</td>
+            <td>{{s[1]}}</td>
+            <td>{{s[2]}}</td>
+        </tr>
+        {%endif%}
+        {%endfor%}
+    </table>
+    </div>
+
+    <div class="col-md-6 col-xs-12">
+        <form >
+            <div class="form-group">
+                <input type="text" class="form-control" name="kw" placeholder="Nhập Từ Khóa...">
+
+            </div>
+            <div class="form-group">
+                <input type="date" class="form-control"name="from_date">
+            </div>
+            <div class="form-group">
+                <input type="date" class="form-control"name="to_date">
+            </div>
+            <input type="submit" value="Thống Kê" class="btn btn-info">
+
+
+        </form>
+        <canvas id="myProductChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let labels=[]
+        let info=[]
+        {%for s in stats%}
+        {%if s[2]%}
+        labels.push('{{s[1]}}')
+        info.push({{s[2]}})
+        {%endif%}
+        {%endfor%}
+        window.onload=function(){
+              const ctx = document.getElementById('myProductChart');
+
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: labels,
+                  datasets: [{
+                    label: 'Doanh Thu SP',
+                    data: info,
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }
+              });
+        }
+    </script>
+</div>
+{%endblock%}

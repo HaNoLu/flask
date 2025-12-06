@@ -3,6 +3,7 @@ from flask import render_template,redirect,url_for,request,session,jsonify
 
 
 from mysaleapp.saleapp import app, utils,login
+from mysaleapp.saleapp.models import UserRole
 import cloudinary.uploader
 from flask_login import login_user,logout_user,login_required
 
@@ -81,6 +82,18 @@ def login_page():
         else:
             err_msg="Password of Username is Fasle"
     return render_template('login.html',err_msg=err_msg)
+@app.route('/admin_login',methods=['POST'])
+def admin_login():
+        if request.method.__eq__('POST'):
+            username = request.form.get('username')
+            password = request.form.get('password')
+            user = utils.check_user(username=username,
+                                     password=password,
+                                     role=UserRole.ADMIN)
+        if user:
+            login_user(user=user)
+
+        return redirect('/admin')
 @app.route('/cart')
 def cart():
     return render_template('cart.html',stats=utils.get_quantity_cart(session.get('cart')))

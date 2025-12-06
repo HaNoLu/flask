@@ -1,8 +1,9 @@
-from flask import session
+
 from mysaleapp.saleapp.models import Product, Category, User, Receipt,ReceiptDetails
 from mysaleapp.saleapp import app,db
 from flask_login import current_user
 import hashlib
+from sqlalchemy import func
 def read_json(path):
     pass
 def load_categories():
@@ -48,6 +49,13 @@ def check_login(username,password):
                            User.password==password).first()
     if user:
         return user
+def check_user(username,password,role):
+    password = str(hashlib.md5(password.encode('utf-8')).hexdigest())
+    user = User.query.filter(User.username == username.strip(),
+                             User.password == password,
+                             User.user_role.__eq__(role)).first()
+    if user:
+        return user
 def get_user_by_id(user_id):
     return User.query.get(user_id)
 def get_quantity_cart(cart):
@@ -69,3 +77,23 @@ def add_receipt(cart):
             d=ReceiptDetails(receipt=receipt,product_id=c['id'] ,quantity=c['quantity'],price=c['price'])
             db.session.add(d)
         db.session.commit()
+def category_stats():
+    with app.app_context():
+        return db.session.query(Category.id,Category.name,func.count(Product.id))\
+                     .join(Product,Category.id.__eq__(Product.category_id),isouter=True)\
+                     .group_by(Category.id,Category.name).all()
+def product_stats(kw=None,from_date=None,to_date=None):
+
+    with app.app_context():
+        p=db.session.query(Product.id,Product.name,func.sum(ReceiptDetails.price*ReceiptDetails.quantity))\
+                    .join(ReceiptDetails,ReceiptDetails.product_id.__eq__(Product.id),isouter=True)\
+                    .join(Receipt,Receipt.id.__eq__(ReceiptDetails.receipt_id))\
+                    .group_by(Product.id,Product.name)
+        if kw:
+            p=p.filter(Product.name.contains(kw))
+        if from_date:
+            p=p.filter(Receipt.created_date >= from_date)
+        if to_date:
+            p=p.filter(Receipt.created_date<= to_date)
+        return p.all()
+
